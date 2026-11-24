@@ -74,7 +74,7 @@ def build(n,B):
         if not b['gram']:err.append('block%d gram 空'%i)
         out.append(dict(a=a,z=z,star=b['star'],grk=grk,lit='<blockquote><p>%s</p></blockquote>'%html.escape(lit,quote=False),key=key,gram=gram,exp=exp))
     if nxt!=maxv+1:err.append('未覆蓋到 %d 節（止於 %d）'%(maxv,nxt-1))
-    if not(6<=len(B)<=22):err.append('區塊數 %d 不在 6–22'%len(B))
+    if not(min(6,maxv)<=len(B)<=22):err.append('區塊數 %d 不在 %d–22'%(len(B),min(6,maxv)))
     return out,err
 def run(n):
     p=os.path.join(ROOT,'blk/src/%02d.py'%n)
