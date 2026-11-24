@@ -12,6 +12,9 @@ for n in range(1,N+1):
 iss=[i for i in bp['issues'] if i['id'].startswith('ISS00_')]
 for f in sorted(glob.glob(os.path.join(R,'iss/*.json'))): iss+=json.load(open(f,encoding='utf-8'))
 ids=[i['id'] for i in iss]; assert len(ids)==len(set(ids))
+T=bp['terrain']
+for pt in T['points']:
+    if pt[4] is None:pt[4]='mid'
 D=dict(ch=ch,txt=txt,blk=blk,serm=serm,issues=iss,terrain=bp['terrain'],tracks=bp['tracks'],lesson=lesson)
 os.makedirs(os.path.join(R,'build'),exist_ok=True)
 json.dump(D,open(os.path.join(R,'build/data.json'),'w',encoding='utf-8'),ensure_ascii=False,separators=(',',':'))

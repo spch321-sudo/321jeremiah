@@ -39,11 +39,25 @@ mf.update(name='耶利米書講義',short_name='耶利米書講義',description=
 json.dump(mf,open(S+'/manifest.webmanifest','w',encoding='utf-8'),ensure_ascii=False,indent=2)
 sw=open(ISA+'sw.js',encoding='utf-8').read()
 sw=re.sub(r"const V = '[^']*';","const V = '%s';"%ver,sw);sw=sw.replace("const PFX = '以賽亞書-';","const PFX = '耶利米書-';").replace('321以賽亞書講義','321耶利米書講義')
-has_en=os.path.exists(S+'/en.html')
+E=json.load(open(R+'/build/data_en.json',encoding='utf-8'))
+sh=open(R+'/build/shell_jer_en.html',encoding='utf-8').read()
+assert sh.count('@@DATA@@')==1
+dj=json.dumps(E,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
+for a_,b_ in [('{"n":21,"t":"以賽亞書"','{"n":21,"t":"傳道書"'),('["以賽亞書",21]','["傳道書",21]'),("const BOOK = T('以賽亞書'","const BOOK = T('耶利米書'"),("T('以賽亞書' + n","T('耶利米書' + n"),("目前讀到：以賽亞書 第","目前讀到：耶利米書 第"),("目前读到：以赛亚书 第","目前读到：耶利米书 第")]:
+    assert sh.count(a_)==1,a_
+    sh=sh.replace(a_,b_)
+enp=sh.replace('@@DATA@@',dj)
+import build_en
+assert not build_en.han_left(E),'Han in English DATA'
+open(S+'/en.html','w',encoding='utf-8').write(enp)
+me=json.load(open(ISA+'manifest-en.webmanifest',encoding='utf-8'))
+me.update(name='Jeremiah Study Notes',short_name='Jeremiah Notes',description='Jeremiah, all fifty-two chapters: verse-by-verse exposition from the original, sermon manuscripts, teaching lessons and 321 life application.',id='/321jeremiah/en.html')
+json.dump(me,open(S+'/manifest-en.webmanifest','w',encoding='utf-8'),ensure_ascii=False,indent=2)
+has_en=True
 shell_list=['./','./index.html','./sc.html']+(['./en.html','./manifest-en.webmanifest'] if has_en else [])+['./manifest.webmanifest']+[f'./icon-{z}.png' for z in(192,512,180,167,152,120,64,32)]+['./favicon.ico','./xz2.js','./coread.js','./peerjs.min.js']
 sw=re.sub(r'const SHELL = \[.*?\];','const SHELL = '+json.dumps(shell_list)+';',sw,flags=re.S)
 assert '以賽亞' not in sw and 'Isaiah' not in sw
 open(S+'/sw.js','w',encoding='utf-8').write(sw)
 json.dump({'v':ver},open(S+'/version.json','w',encoding='utf-8'),ensure_ascii=False)
-open(S+'/README.md','w',encoding='utf-8').write('國度321空中團契《321聖經講義》耶利米書（五十二章、1,364 節），版本 v1.0。\n\n- 繁體中文：`index.html`（完整）\n- 简体中文：`sc.html`（完整；同一支 App 以简体开启，内嵌繁简对照表一键切换）\n- English：`en.html`（製作中）\n\n發佈網址：https://spch321-sudo.github.io/321jeremiah/\n\n離線可用的 PWA；iPhone 請先刪除舊的主畫面捷徑再重新「加入主畫面」。\n')
+open(S+'/README.md','w',encoding='utf-8').write('國度321空中團契《321聖經講義》耶利米書（五十二章、1,364 節），版本 v1.0。\n\n- 繁體中文：`index.html`（完整）\n- 简体中文：`sc.html`（完整；同一支 App 以简体开启，内嵌繁简对照表一键切换）\n- English：`en.html`（完整）\n\n發佈網址：https://spch321-sudo.github.io/321jeremiah/\n\n離線可用的 PWA；iPhone 請先刪除舊的主畫面捷徑再重新「加入主畫面」。\n')
 print('site ok',ver,{f:os.path.getsize(S+'/'+f) for f in('index.html','sc.html')})
