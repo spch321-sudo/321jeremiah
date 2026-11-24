@@ -18,7 +18,7 @@ for line in open(src,encoding='utf-8').read().splitlines():
     if m and vk is not None: vk[2]+=m.group(2)
 def clean(t):
     t=re.sub(r'\\f .*?\\f\*','',t)           # 註腳
-    t=re.sub(r'\\(pn|add)\*?','',t)
+    t=re.sub(r'\\\+?(pn|add)\*?','',t)
     t=re.sub(r'\s+','',t)                    # 中文不留空白
     t=t.replace('上帝','神').replace('裏','裡').replace('着','著')  # 與以賽亞書 txt 同一規範
     return t
