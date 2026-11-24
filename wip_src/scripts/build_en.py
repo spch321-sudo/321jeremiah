@@ -6,7 +6,7 @@ def mapping():
     allu=json.load(open(R+'/en/units_all.json',encoding='utf-8'))
     M=json.load(open(R+'/en/auto.json',encoding='utf-8'))
     miss=0
-    for f in sorted(glob.glob(R+'/en/out/P*.json')):
+    for f in sorted(sorted(glob.glob(R+'/en/out/P*.json'))+sorted(glob.glob(R+'/en/out/Q*.json'))):
         o=json.load(open(f,encoding='utf-8'))
         for k,v in o.items():
             if k in allu:M[allu[k]]=v
