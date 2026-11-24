@@ -5139,7 +5139,7 @@ function vText(){
     const vn = i + 1, ref = n + ':' + vn, b = VMAP[ref];
     const first = b && b.a === vn;
     const cls = b ? (b.star ? 'vs star has' : 'vs has') : 'vs';
-    const note = (n === 12 && vn === 29) ? '<span class="flag" style="color:var(--dusk)">※ 和合本此節併入上節</span>' : '';
+    const note = '';
     const tag = first && b.z > b.a ? `<span class="flag" style="color:var(--dusk)">解經　${b.a}–${b.z}節</span>` : '';
     const t2 = D.txt[n][i];
     const sents = splitHTML(esc(t2));
